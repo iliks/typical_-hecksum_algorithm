@@ -1,7 +1,5 @@
-def enc(g,a,e):
-    b = ''
+def div(a, g):
     c = a
-    r = len(g) - 1
     while len(a) > r:
         a2 = list(a)
         for i in range(len(g)):
@@ -12,6 +10,15 @@ def enc(g,a,e):
         a = ''.join(a2)
         while a[0] == '0' and len(a) > 1:
             a = a[1:]
+    print('Result of division', c, ' by ', g, ' is ', a)
+    return a
+
+
+def enc(g, a, e):
+    b = ''
+    c = a
+    r = len(g) - 1
+    a = div(a, g)
     a = '0' * (r - len(a)) + a
     c = c[:-r] + a
     e = '0' * (len(c)-len(e)) + e
@@ -21,19 +28,20 @@ def enc(g,a,e):
 
 
 def check(b, g):
-    while len(b) > len(g) -1 :
-        b1 = list(b)
-        for i in range(len(g)):
-            if b1[i] != g[i]:
-                b1[i] = '1'
-            else:
-                b1[i] = '0'
-        b = ''.join(b1)
-        while b[0] != '1':
-            if len(b) <= 1:
-                break
-            b = b[1:]
+    b = div(b, g)
     if b == '' or b == '0':
+        s = 0
+        return s
+    s = 1
+    return s
+
+
+def check2(b, g):
+    a = b[:-len(g)+1]
+    a = a + '0' * (len(g)-1)
+    a = div(a, g)
+    d = b[-len(g)+1:]
+    if a == b[-len(g)+1:]:
         s = 0
         return s
     s = 1
@@ -49,7 +57,7 @@ m = [0]
 a = []
 b = []
 s = []
-print(len(l))
+s1 = []
 if len(l) <= k:
     m[0] = l
 else:
@@ -66,8 +74,14 @@ for i in a:
     b.append(enc(g, i, e))
 for i in b:
     s.append(check(i, g))
+    s1.append(check2(i,g))
 for i in range(len(s)):
     if s[i] == 0:
-        print('В части кода ', i + 1, ' ошибок не обнаружено')
+        print('В результате проверки первым способом, в части кода', i + 1, ' ошибок не обнаружено')
     else:
-        print('В части кода ', i + 1, ' ошибка обнаружена')
+        print('В результате проверки первым способом, в  части кода ', i + 1, ' ошибка обнаружена')
+for i in range(len(s1)):
+    if s1[i] == 0:
+        print('В результате проверки вторым способом, в части кода', i + 1, ' ошибок не обнаружено')
+    else:
+        print('В результате проверки вторым способом, в  части кода ', i + 1, ' ошибка обнаружена')
